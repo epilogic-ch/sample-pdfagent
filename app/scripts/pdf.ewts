@@ -1,0 +1,39 @@
+@accept(servlet = [ "web" ])
+
+var pdf = $request.getParameter("pdffile"),
+    ids = $request.getParameter("pageids", "");
+
+$logger.info(pdf);
+$logger.info(ids);
+
+if (pdf && ids != "") {
+    // let's convert the string array into int array
+    var array = [];
+    for (var c : $string.split(ids, ",")) {
+        array &= (number) c;
+    }
+
+    // build new pdf using pages order given in ids
+    var newpdf = $file.create(null);
+    if ($pdf.filterPage(pdf, array, { saveAs: newpdf })) {
+        $response.setStatus(200);
+        $response.setContentType("application/pdf");
+        $response.setContentDisposition(`inline; filename="` & $file.getName(pdf) &`"`);
+        $response.addContent(newpdf);
+        $response.flush();
+
+        $file.delete(newpdf);
+    }
+    else {
+        $logger.error("cannot create pdf");
+        $response.setStatus(500);
+        $response.setContentType("application/json");
+        $response.addContent(`{}`);
+    }
+}
+else {
+    $logger.error("missing data");
+    $response.setStatus(400);
+    $response.setContentType("application/json");
+    $response.addContent(`{}`);
+}

@@ -1,0 +1,138 @@
+$fd-width: 100%;                              /* drop zone width */
+$fd-height: 100px;                            /* drop zone height */
+$fd-bgcolor-default: #e8f7f8;               /* drop zone default background color */
+$fd-bgcolor-dragover: #c8d5da;              /* drop zone background color when dragging file */
+
+$fd-outline: 2px dashed #ababab;            /* drop zone outline */
+$fd-outline-offset: -10px;                    /* drop zone outline offset */
+
+$fd-drop-label-hover: #149fd6;              /* color of "Choose a file" label when focused or hovered */
+
+$fd-drop-upload-btn-color: #e5edf1;         /* default text color of "Upload" button (displayed when auto-submit is disabled) */
+$fd-drop-upload-btn-bgcolor: #39bfd3;       /* default background color of "Upload" button */
+$fd-drop-upload-btn-bgcolor-hover: #0f3c4b; /* default background color of "Upload" button when hovered */
+
+.fd-container {
+    position: relative;
+    width: $fd-width;
+    height: $fd-height;
+    background-color: $fd-bgcolor-default;
+
+    display: flex;
+    justify-content: center;
+
+    & > div {
+        align-content: center;
+        text-align: center;
+    }
+
+    .fd-drop-input {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+    .fd-drop-input + label {
+        display: inline-block;
+    	cursor: pointer;
+    }
+    
+    .fd-drop-input:focus + label strong, .fd-drop-input + label:hover strong {
+        color: $fd-drop-label-hover;
+    }
+
+    .fd-drop-input:focus + label {
+        outline: 1px dotted #000;
+        outline: -webkit-focus-ring-color auto 5px;
+    }
+
+    &.is-fd-enabled {
+        outline: $fd-outline;
+        outline-offset: $fd-outline-offset;
+
+        &.is-dragover {
+            background-color: $fd-bgcolor-dragover;
+        }
+
+        .fd-dragndrop {
+            display: inline;
+        }
+    }
+
+    &.is-uploading {
+        .fd-drop-zone {
+            visibility: none;
+        }
+        .fd-uploading {
+            display: block;
+        }
+    }
+
+    &.is-auto-submit {
+        .fd-drop-upload-btn {
+            display: none;
+        }
+    }
+
+    .fd-drop-upload-btn {
+        display: block;
+        border: none;
+        margin: 40px auto 0;
+        padding: 8px 16px;
+        font-weight: 700;
+        color: $fd-drop-upload-btn-color;
+        background-color: $fd-drop-upload-btn-bgcolor;
+
+        &:hover {
+            background-color: $fd-drop-upload-btn-bgcolor-hover;
+        }
+    }
+
+    .fd-base-label,
+    .fd-dragndrop,
+    .fd-uploading,
+    .fd-success,
+    .fd-error,
+    .fd-oversize {
+        display: none;
+    }
+
+    &.is-uploading .fd-drop-zone,
+    &.is-success .fd-drop-zone,
+    &.is-error .fd-drop-zone,
+    &.is-oversize .fd-drop-zone {
+        visibility: hidden;
+    }
+
+    &.is-uploading .fd-uploading,
+    &.is-success .fd-success,
+    &.is-error .fd-error,
+    &.is-oversize .fd-oversize {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        left: 0;
+
+        -webkit-transform: translateY( -50% );
+        transform: translateY( -50% );
+    }
+
+    .no-js .fd-drop-upload-btn {
+        display: block !important;
+    }
+}
+
+/* additional cosmetic elements */
+.fd-container {
+    .fd-drop-icon {                /* drop icon */
+        width: 100%;
+        height: 80px;
+        fill: #92b0b3;
+        display: block;
+        margin-bottom: 40px;
+    }
+}
